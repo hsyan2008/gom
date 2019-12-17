@@ -1,5 +1,5 @@
 # gom
-自动生成各种orm的models，目前支持gorm、xorm
+自动生成orm的models，目前支持gorm、xorm
 
 ### 使用方法
 * 安装
