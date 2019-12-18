@@ -1,6 +1,10 @@
 # gom
 自动从mysql、postgres、sqlite3、mssql等数据库生成xorm、gorm的models
 
+### 参考
+* https://github.com/go-xorm/cmd/   
+* https://github.com/xxjwxc/gormt  
+
 ### 使用方法
 * 安装
 

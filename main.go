@@ -1,26 +1,21 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/hsyan2008/gom/common"
 )
 
 func main() {
-	var err error
-	err = common.LoadConfig()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	// fmt.Printf("%#v\n", common.Configs())
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 
-	genTool := common.NewGenTool()
-	err = genTool.Gen()
-	if err != nil {
-		fmt.Println(err)
-		return
+	if err := common.LoadConfig(); err != nil {
+		log.Fatal(err)
 	}
 
-	fmt.Println("done")
+	if err := common.NewGenTool().Gen(); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("done")
 }

@@ -14,18 +14,14 @@ type model struct {
 	Fields     []modelField      //对应的目标代码格式
 }
 
-func NewModel(table *core.Table) (m model, err error) {
+func NewModel(table *core.Table) (m model) {
 	m = model{
 		StructName: big_camel.Marshal(table.Name),
 		TableName:  table.Name,
 		Imports:    make(map[string]string),
 	}
 	for _, column := range table.Columns() {
-		// fmt.Printf("%s%#v\n", table.Name, column)
-		f, err := NewModelField(table, column)
-		if err != nil {
-			return m, err
-		}
+		f := NewModelField(table, column)
 		for k, v := range f.Imports {
 			m.Imports[k] = v
 		}
@@ -44,7 +40,7 @@ type modelField struct {
 	Comment    string //备注，放到注释里
 }
 
-func NewModelField(table *core.Table, column *core.Column) (f modelField, err error) {
+func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 	f = modelField{
 		FieldName:  big_camel.Marshal(column.Name),
 		ColumnName: column.Name,

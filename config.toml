@@ -3,4 +3,6 @@ driver     = "mysql" #数据库类型，目前支持mysql、postgres、sqlite3�
 source     = "username:passwordd@(localhost:3306)/gom" #数据库配置，请参考xorm，这是mysql的
 source     = "host=localhost port=5432 user=postgres password=password dbname=dbname sslmode=disable" #数据库配置，请参考xorm，这是pgsql的，如果有自定义类型，无法生成
 tag_type   = ["json","xorm","gorm"] #生成的tag类型，目前支持json、xorm和gorm
-tables     = ["test_gom"] # 指定生成对应表
+tables     = ["test_gom"] # 指定生成对应表，第一优先级
+exclude_tables = []  #排除指定的表，第二优先级
+try_complete = true  #当碰到有些table无法处理，是否继续处理其他table

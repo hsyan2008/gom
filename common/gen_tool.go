@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/format"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -34,7 +35,7 @@ func NewGenTool() *GenTool {
 }
 
 func (genTool *GenTool) getDBMetas() (err error) {
-	genTool.tables, err = DBMetas(Configs().Tables...)
+	genTool.tables, err = DBMetas(Configs().Tables, Configs().ExcludeTables, Configs().TryComplete)
 	if err != nil {
 		return
 	}
@@ -42,25 +43,18 @@ func (genTool *GenTool) getDBMetas() (err error) {
 	return nil
 }
 
-func (genTool *GenTool) genModels() (err error) {
+func (genTool *GenTool) genModels() {
 	for _, table := range genTool.tables {
-		// fmt.Printf("%#v\n", table)
-		// fmt.Printf("%#v\n", table.Name)
-		model, err := NewModel(table)
-		if err != nil {
-			return err
-		}
+		model := NewModel(table)
 		genTool.models[model.TableName] = model
 	}
 
-	return nil
+	return
 }
 
 func (genTool *GenTool) genFile() (err error) {
-	// fmt.Println(genTool.packageName)
-	// fmt.Println(genTool.models)
 	for _, model := range genTool.models {
-		fmt.Println("start gen table:", model.TableName)
+		log.Println("start gen table:", model.TableName)
 		str := fmt.Sprintln("package", genTool.packageName)
 		if len(model.Imports) > 0 {
 			str += fmt.Sprintln("import (")
@@ -87,29 +81,23 @@ func (genTool *GenTool) genFile() (err error) {
 		if err != nil {
 			return err
 		}
-		fmt.Println("gen to:", file)
+		log.Println("gen to:", file)
 	}
 	return
 }
 
 func (genTool *GenTool) Gen() (err error) {
 	if err = InitDb(); err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	if err = genTool.getDBMetas(); err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	if err = genTool.genModels(); err != nil {
-		fmt.Println(err)
-		return
-	}
+	genTool.genModels()
 
 	if err = genTool.genFile(); err != nil {
-		fmt.Println(err)
 		return
 	}
 

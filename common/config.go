@@ -3,6 +3,7 @@ package common
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
@@ -30,18 +31,20 @@ func LoadConfig() (err error) {
 	}
 
 	if _, err = toml.DecodeFile(configFile, &config); err != nil {
-		return
+		return fmt.Errorf("decode toml file faild: %s", err)
 	}
 
 	return
 }
 
 type AppConfigs struct {
-	TargetDir string   `toml:"target_dir"`
-	Driver    string   `toml:"driver"`
-	Source    string   `toml:"source"`
-	TagType   []string `toml:"tag_type"`
-	Tables    []string `toml:"tables"`
+	TargetDir     string   `toml:"target_dir"`
+	Driver        string   `toml:"driver"`
+	Source        string   `toml:"source"`
+	TagType       []string `toml:"tag_type"`
+	Tables        []string `toml:"tables"`
+	ExcludeTables []string `toml:"exclude_tables"`
+	TryComplete   bool     `toml:"try_complete"`
 }
 
 func Configs() AppConfigs {

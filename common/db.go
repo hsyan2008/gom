@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"log"
 
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
@@ -21,7 +22,7 @@ func InitDb() (err error) {
 	engine.SetLogLevel(core.LOG_WARNING)
 
 	if err = engine.Ping(); err != nil {
-		return
+		return fmt.Errorf("try to connect db faild: %s", err)
 	}
 
 	return nil
@@ -32,21 +33,32 @@ func DB() *xorm.Engine {
 }
 
 // DBMetas
-// t 指定表，不指定就所有表
-func DBMetas(t ...string) (tables []*core.Table, err error) {
+//如果指定了t，只处理指定表，第一优先级
+//如果指定了et，处理除了指定表以外的所有表
+func DBMetas(t []string, et []string, tryComplete bool) (tables []*core.Table, err error) {
 	//类似DBMetas，因为一次性获取，碰到pgsql自定义的类型，直接出错，通过下面的方法，可以过滤
 
 	dialect := DB().Dialect()
 	tmpTables, err := dialect.GetTables()
 	if err != nil {
-		return
+		return nil, fmt.Errorf("get tables faild: %s", err)
 	}
 	for _, v := range tmpTables {
-		if len(t) > 0 && !InStringSlice(v.Name, t) {
-			continue
+		if len(t) > 0 {
+			if !InStringSlice(v.Name, t) {
+				continue
+			}
+		} else if len(et) > 0 {
+			if InStringSlice(v.Name, et) {
+				continue
+			}
 		}
 		if err = loadTableInfo(v); err != nil {
-			return
+			if tryComplete {
+				log.Printf("load table:%s info faild: %s, strip", v.Name, err)
+				continue
+			}
+			return nil, fmt.Errorf("load table:%s info faild: %s, please add it into exclude_tables, or set try_complete=true", v.Name, err)
 		}
 		tables = append(tables, v)
 	}
