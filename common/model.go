@@ -46,6 +46,9 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		Type:       sqlType2TypeString(column.SQLType),
 		Imports:    getGoImports(column),
 	}
+	if f.ColumnName == "is_deleted" {
+		f.Type = "bool"
+	}
 	if column.Comment != "" {
 		f.Comment = "// " + column.Comment
 	}
