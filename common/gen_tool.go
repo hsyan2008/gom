@@ -55,7 +55,11 @@ func (genTool *GenTool) genModels() {
 func (genTool *GenTool) genFile() (err error) {
 	for _, model := range genTool.models {
 		log.Println("start gen table:", model.TableName)
+
+		//package
 		str := fmt.Sprintln("package", genTool.packageName)
+
+		//import
 		if len(model.Imports) > 0 {
 			str += fmt.Sprintln("import (")
 			for _, i := range model.Imports {
@@ -63,15 +67,20 @@ func (genTool *GenTool) genFile() (err error) {
 			}
 			str += fmt.Sprintln(")")
 		}
+
+		//struct
 		str += fmt.Sprintln("type", model.StructName, "struct {")
 		for _, v := range model.Fields {
-			str += fmt.Sprintln(v.FieldName, v.Type, v.Tag)
+			str += fmt.Sprintln(v.FieldName, v.Type, v.Tag, v.Comment)
 		}
 		str += fmt.Sprintln("}")
+
+		//func
 		str += fmt.Sprintln("func (", model.StructName, ") TableName() string {")
 		str += fmt.Sprintln(fmt.Sprintf("return `%s`", model.TableName))
 		str += fmt.Sprintln("}")
 
+		//format
 		b, err := format.Source([]byte(str))
 		if err != nil {
 			return err

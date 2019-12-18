@@ -46,7 +46,9 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		ColumnName: column.Name,
 		Type:       sqlType2TypeString(column.SQLType),
 		Imports:    getGoImports(column),
-		Comment:    column.Comment,
+	}
+	if column.Comment != "" {
+		f.Comment = "// " + column.Comment
 	}
 	tags := []string{}
 	for _, v := range Configs().TagType {
