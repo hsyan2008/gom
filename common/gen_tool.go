@@ -28,7 +28,7 @@ func NewGenTool() *GenTool {
 		os.MkdirAll(dir, 0755)
 	}
 	return &GenTool{
-		targetDir:   dir,
+		targetDir:   Configs().TargetDir,
 		packageName: filepath.Base(dir),
 		models:      make(map[string]model),
 	}
@@ -90,8 +90,9 @@ func (genTool *GenTool) genFile() (err error) {
 		if err != nil {
 			return err
 		}
-		log.Println("gen to:", file)
+		log.Println("gen into file:", file)
 	}
+
 	return
 }
 
@@ -99,16 +100,21 @@ func (genTool *GenTool) Gen() (err error) {
 	if err = InitDb(); err != nil {
 		return
 	}
+	log.Println("init db connect success!")
 
 	if err = genTool.getDBMetas(); err != nil {
 		return
 	}
+	log.Println("get tables info success!")
 
 	genTool.genModels()
+	log.Println("format tables info success!")
 
+	log.Println("start generate model files...")
 	if err = genTool.genFile(); err != nil {
 		return
 	}
+	log.Println("generate complete!")
 
 	return nil
 }

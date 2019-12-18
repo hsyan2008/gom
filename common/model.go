@@ -3,7 +3,6 @@ package common
 import (
 	"strings"
 
-	"github.com/hsyan2008/gom/common/big_camel"
 	"xorm.io/core"
 )
 
@@ -16,7 +15,7 @@ type model struct {
 
 func NewModel(table *core.Table) (m model) {
 	m = model{
-		StructName: big_camel.Marshal(table.Name),
+		StructName: core.LintGonicMapper.Table2Obj(table.Name),
 		TableName:  table.Name,
 		Imports:    make(map[string]string),
 	}
@@ -42,7 +41,7 @@ type modelField struct {
 
 func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 	f = modelField{
-		FieldName:  big_camel.Marshal(column.Name),
+		FieldName:  core.LintGonicMapper.Table2Obj(column.Name),
 		ColumnName: column.Name,
 		Type:       sqlType2TypeString(column.SQLType),
 		Imports:    getGoImports(column),

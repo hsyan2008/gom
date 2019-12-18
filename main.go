@@ -16,6 +16,4 @@ func main() {
 	if err := common.NewGenTool().Gen(); err != nil {
 		log.Fatal(err)
 	}
-
-	log.Println("done")
 }
