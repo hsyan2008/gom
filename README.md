@@ -1,5 +1,5 @@
 # gom
-自动生成orm的models，目前支持gorm、xorm
+自动从mysql、postgres、sqlite3、mssql等数据库生成xorm、gorm的models
 
 ### 使用方法
 * 安装

@@ -1,6 +1,6 @@
 target_dir = "./models" #生成的model存放的路径
-driver     = "mysql" #数据库类型
+driver     = "mysql" #数据库类型，目前支持mysql、postgres、sqlite3、mssql
 source     = "username:passwordd@(localhost:3306)/gom" #数据库配置，请参考xorm，这是mysql的
 source     = "host=localhost port=5432 user=postgres password=password dbname=dbname sslmode=disable" #数据库配置，请参考xorm，这是pgsql的，如果有自定义类型，无法生成
-tag_type   = ["json","xorm","gorm"] #生成的tag类型，目前是json、xorm和gorm
+tag_type   = ["json","xorm","gorm"] #生成的tag类型，目前支持json、xorm和gorm
 tables     = ["test_gom"] # 指定生成对应表
