@@ -46,7 +46,7 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		Type:       sqlType2TypeString(column.SQLType),
 		Imports:    getGoImports(column),
 	}
-	if strings.HasPrefix(f.ColumnName, "is_") && f.Type == "tinyint" {
+	if strings.HasPrefix(f.ColumnName, "is_") && column.SQLType.Name == "TINYINT" {
 		f.Type = "bool"
 	}
 	if column.Comment != "" {
