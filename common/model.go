@@ -46,7 +46,7 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		Type:       sqlType2TypeString(column.SQLType),
 		Imports:    getGoImports(column),
 	}
-	if f.ColumnName == "is_deleted" {
+	if strings.HasPrefix(f.ColumnName, "is_") && f.Type == "tinyint" {
 		f.Type = "bool"
 	}
 	if column.Comment != "" {
