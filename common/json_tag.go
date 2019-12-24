@@ -7,5 +7,9 @@ import (
 )
 
 func GetJsonTag(table *core.Table, column *core.Column) string {
+	return fmt.Sprintf(`json:"%s"`, column.Name)
+}
+
+func GetJsonTagWithOmitEmpty(table *core.Table, column *core.Column) string {
 	return fmt.Sprintf(`json:"%s,omitempty"`, column.Name)
 }

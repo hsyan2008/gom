@@ -15,3 +15,5 @@
 # vendor/
 go.sum
 models*/
+config_pg.toml
+config_mysql.toml

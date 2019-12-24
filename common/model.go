@@ -56,7 +56,11 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 	for _, v := range Configs().TagType {
 		switch v {
 		case "json":
-			tags = append(tags, GetJsonTag(table, column))
+			if Configs().JsonOmitempty {
+				tags = append(tags, GetJsonTagWithOmitEmpty(table, column))
+			} else {
+				tags = append(tags, GetJsonTag(table, column))
+			}
 		case "xorm":
 			tags = append(tags, GetXormTag(table, column))
 		case "gorm":

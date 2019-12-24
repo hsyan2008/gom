@@ -6,3 +6,4 @@ tag_type   = ["json","xorm","gorm"] #生成的tag类型，目前支持json、xor
 tables     = ["test_gom"] # 指定生成对应表，第一优先级
 exclude_tables = []  #排除指定的表，第二优先级
 try_complete = true  #当碰到有些table无法处理，是否继续处理其他table
+json_omitempty = true #是否添加omitempty

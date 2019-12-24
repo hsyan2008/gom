@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/hsyan2008/hfw/common"
@@ -21,7 +22,9 @@ func LoadConfig() (err error) {
 	}
 	configLoaded = true
 
+	var tables string
 	flag.StringVar(&configFile, "c", "config.toml", "config file")
+	flag.StringVar(&tables, "t", "", "specify tables")
 	flag.Parse()
 
 	configFile = filepath.Join(common.GetAppPath(), configFile)
@@ -34,6 +37,10 @@ func LoadConfig() (err error) {
 		return fmt.Errorf("decode toml file faild: %s", err)
 	}
 
+	if tables != "" {
+		config.Tables = strings.Split(tables, ",")
+	}
+
 	return
 }
 
@@ -42,9 +49,10 @@ type AppConfigs struct {
 	Driver        string   `toml:"driver"`
 	Source        string   `toml:"source"`
 	TagType       []string `toml:"tag_type"`
-	Tables        []string `toml:"tables"`
+	Tables        []string `toml:"tables"` // -t
 	ExcludeTables []string `toml:"exclude_tables"`
 	TryComplete   bool     `toml:"try_complete"`
+	JsonOmitempty bool     `toml:"json_omitempty"`
 }
 
 func Configs() AppConfigs {
