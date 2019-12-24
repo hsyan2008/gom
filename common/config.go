@@ -45,14 +45,15 @@ func LoadConfig() (err error) {
 }
 
 type AppConfigs struct {
-	TargetDir     string   `toml:"target_dir"`
-	Driver        string   `toml:"driver"`
-	Source        string   `toml:"source"`
-	TagType       []string `toml:"tag_type"`
-	Tables        []string `toml:"tables"` // -t
-	ExcludeTables []string `toml:"exclude_tables"`
-	TryComplete   bool     `toml:"try_complete"`
-	JsonOmitempty bool     `toml:"json_omitempty"`
+	TargetDir     string            `toml:"target_dir"`     //生成的model保存的目录
+	Driver        string            `toml:"driver"`         //数据库类型
+	Source        string            `toml:"source"`         //数据库连接信息
+	TagType       []string          `toml:"tag_type"`       //生成的tag类型
+	Tables        []string          `toml:"tables"`         // -t，指定生成的tables
+	ExcludeTables []string          `toml:"exclude_tables"` //排除tables
+	TryComplete   bool              `toml:"try_complete"`   //是否跳过错误的table
+	JsonOmitempty bool              `toml:"json_omitempty"` //json是否带上omitempty
+	ReplaceType   map[string]string `toml:"replace_type"`   //替换的类型，如Time替换成自己实现的
 }
 
 func Configs() AppConfigs {

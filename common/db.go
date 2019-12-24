@@ -93,21 +93,9 @@ func loadTableInfo(table *core.Table) error {
 }
 
 func sqlType2TypeString(st core.SQLType) string {
-	t := core.SQLType2Type(st)
-	s := t.String()
-	if s == "[]uint8" {
-		return "[]byte"
-
+	t := core.SQLType2Type(st).String()
+	if t == "[]uint8" {
+		t = "[]byte"
 	}
-	return s
-}
-
-func getGoImports(column *core.Column) map[string]string {
-	imports := make(map[string]string)
-
-	if sqlType2TypeString(column.SQLType) == "time.Time" {
-		imports["time"] = "time"
-	}
-
-	return imports
+	return t
 }

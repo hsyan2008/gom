@@ -43,9 +43,9 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 	f = modelField{
 		FieldName:  core.LintGonicMapper.Table2Obj(column.Name),
 		ColumnName: column.Name,
-		Type:       sqlType2TypeString(column.SQLType),
-		Imports:    getGoImports(column),
 	}
+	f.Type, f.Imports = getTypeAndImports(column)
+
 	if strings.HasPrefix(f.ColumnName, "is_") && column.SQLType.Name == "TINYINT" {
 		f.Type = "bool"
 	}
