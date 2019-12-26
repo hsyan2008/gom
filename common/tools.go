@@ -28,11 +28,13 @@ func getTypeAndImports(column *core.Column) (t string, imports map[string]string
 		for k, v := range Configs().ReplaceType {
 			//原类型
 			if t == path.Base(k) {
-				//获取新包名
-				pkg := strings.TrimSuffix(v, path.Ext(v))
 				//获取新类型名
 				t = path.Base(v)
-				imports[pkg] = pkg
+				//获取新包名
+				if path.Ext(v) != "" {
+					pkg := strings.TrimSuffix(v, path.Ext(v))
+					imports[pkg] = pkg
+				}
 			}
 		}
 	} else {
