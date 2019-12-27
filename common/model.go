@@ -44,23 +44,18 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		FieldName:  core.LintGonicMapper.Table2Obj(column.Name),
 		ColumnName: column.Name,
 	}
+
 	f.Type, f.Imports = getTypeAndImports(column)
 
-	if strings.HasPrefix(f.ColumnName, "is_") && column.SQLType.Name == "TINYINT" {
-		f.Type = "bool"
-	}
 	if column.Comment != "" {
 		f.Comment = "// " + column.Comment
 	}
+
 	tags := []string{}
 	for _, v := range Configs().TagType {
 		switch v {
 		case "json":
-			if Configs().JsonOmitempty {
-				tags = append(tags, GetJsonTagWithOmitEmpty(table, column))
-			} else {
-				tags = append(tags, GetJsonTag(table, column))
-			}
+			tags = append(tags, GetJsonTag(table, column))
 		case "xorm":
 			tags = append(tags, GetXormTag(table, column))
 		case "gorm":

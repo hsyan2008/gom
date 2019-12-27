@@ -1,11 +1,15 @@
-target_dir = "./models" #生成的model存放的路径
-driver     = "mysql" #数据库类型，目前支持mysql、postgres、sqlite3、mssql
-source     = "username:passwordd@(localhost:3306)/gom" #数据库配置，请参考xorm，这是mysql的
-source     = "host=localhost port=5432 user=postgres password=password dbname=dbname sslmode=disable" #数据库配置，请参考xorm，这是pgsql的，如果有自定义类型，无法生成
-tag_type   = ["json","xorm","gorm"] #生成的tag类型，目前支持json、xorm和gorm
-tables     = ["test_gom"] # 指定生成对应表，第一优先级
-exclude_tables = []  #排除指定的表，第二优先级
-try_complete = true  #当碰到有些table无法处理，是否继续处理其他table
-json_omitempty = true #是否添加omitempty
-[replace_type]
-time.Time="agefefe.Time"
+target_dir        = "./models" #生成的model存放的路径
+driver            = "mysql" #数据库类型，目前支持mysql、postgres、sqlite3、mssql
+source            = "username:passwordd@(localhost:3306)/gom" #数据库配置，请参考xorm，这是mysql的
+source            = "host=localhost port=5432 user=postgres password=password dbname=dbname sslmode=disable" #数据库配置，请参考xorm，这是pgsql的，如果有自定义类型，无法生成
+tag_type          = ["json","xorm","gorm"] #生成的tag类型，目前支持json、xorm和gorm
+tables            = ["test_gom"] # 指定生成对应表，第一优先级
+exclude_tables    = []  #排除指定的表，第二优先级
+try_complete      = true  #当碰到有些table无法处理，是否继续处理其他table
+json_omitempty    = true #是否添加omitempty
+json_ignore_field = ["password", "salt"] #json忽略的字段
+tinyint2bool      = false  #is_开头的字段，如果是tintint类型，是否转为bool
+[replace_type]      #指定默认类型的替代类型
+"time.Time"       = "agefefe.Time"
+[column_type]       #指定对应的字段使用的类型
+"is_delete"       = ""
