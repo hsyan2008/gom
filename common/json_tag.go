@@ -7,11 +7,16 @@ import (
 )
 
 func GetJsonTag(table *core.Table, column *core.Column) string {
+	var omit = ""
 	if Configs().JSONOmitempty {
-		return fmt.Sprintf(`json:"%s,omitempty"`, column.Name)
+		omit = ",omitempty"
 	}
-	if InStringSlice(column.Name, Configs().JSONIgnoreField) {
-		return `json:"-"`
+
+	var columnName = column.Name
+	if InStringSlice(column.Name, Configs().JSONIgnoreField) ||
+		InStringSlice(fmt.Sprintf("%s.%s", table.Name, column.Name), Configs().JSONIgnoreField) {
+		columnName = "-"
 	}
-	return fmt.Sprintf(`json:"%s"`, column.Name)
+
+	return fmt.Sprintf(`json:"%s"%s`, columnName, omit)
 }

@@ -7,9 +7,9 @@ tables            = ["test_gom"] # 指定生成对应表，第一优先级
 exclude_tables    = []  #排除指定的表，第二优先级
 try_complete      = true  #当碰到有些table无法处理，是否继续处理其他table
 json_omitempty    = true #是否添加omitempty
-json_ignore_field = ["password", "salt"] #json忽略的字段
+json_ignore_field = ["password", "users.salt"] #json忽略的字段，格式可以是table.field
 tinyint2bool      = false  #is_开头的字段，如果是tintint类型，是否转为bool
 [replace_type]      #指定默认类型的替代类型
 "time.Time"       = "agefefe.Time"
-[column_type]       #指定对应的字段使用的类型
-"is_delete"       = ""
+[column_type]       #指定对应的字段使用的类型，key的格式可以是table.field
+"is_deleted"       = ""

@@ -63,7 +63,7 @@ func (genTool *GenTool) genFile() (err error) {
 		if len(model.Imports) > 0 {
 			str += fmt.Sprintln("import (")
 			for _, i := range model.Imports {
-				str += fmt.Sprintf(`"%s"`, i)
+				str += fmt.Sprintf(`"%s"%s`, i, "\n")
 			}
 			str += fmt.Sprintln(")")
 		}

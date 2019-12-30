@@ -45,7 +45,7 @@ func NewModelField(table *core.Table, column *core.Column) (f modelField) {
 		ColumnName: column.Name,
 	}
 
-	f.Type, f.Imports = getTypeAndImports(column)
+	f.Type, f.Imports = getTypeAndImports(table, column)
 
 	if column.Comment != "" {
 		f.Comment = "// " + column.Comment
