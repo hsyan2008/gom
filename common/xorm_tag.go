@@ -63,6 +63,10 @@ func GetXormTag(table *core.Table, col *core.Column) string {
 		res = append(res, uistr)
 	}
 
+	if col.SQLType.Name == "TIMESTAMPZ" {
+		col.SQLType.Name = "TIMESTAMPTZ"
+	}
+
 	nstr := col.SQLType.Name
 	if col.Length != 0 {
 		if col.Length2 != 0 {
