@@ -18,5 +18,5 @@ func GetJsonTag(table *core.Table, column *core.Column) string {
 		columnName = "-"
 	}
 
-	return fmt.Sprintf(`json:"%s"%s`, columnName, omit)
+	return fmt.Sprintf(`json:"%s%s"`, columnName, omit)
 }
