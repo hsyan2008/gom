@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -20,15 +19,18 @@ func GetGormTag(table *core.Table, col *core.Column) string {
 			res = append(res, "not null")
 		}
 	}
+
 	if col.IsPrimaryKey {
 		res = append(res, "primary_key")
 	}
-	if col.Default == "''''" {
-		col.Default = "''"
+
+	if len(col.Default) >= 4 && strings.HasPrefix(col.Default, "''") && strings.HasSuffix(col.Default, "''") {
+		col.Default = col.Default[1 : len(col.Default)-1]
 	}
 	if col.Default != "" {
 		res = append(res, "default "+col.Default)
 	}
+
 	if col.IsAutoIncrement {
 		res = append(res, "AUTO_INCREMENT")
 	}
@@ -57,48 +59,7 @@ func GetGormTag(table *core.Table, col *core.Column) string {
 		res = append(res, uistr)
 	}
 
-	if col.SQLType.Name == "TIMESTAMPZ" {
-		col.SQLType.Name = "TIMESTAMPTZ"
-	}
-
-	nstr := "type:" + strings.ToLower(col.SQLType.Name)
-	if col.Length != 0 {
-		if col.Length2 != 0 {
-			nstr += fmt.Sprintf("(%v,%v)", col.Length, col.Length2)
-		} else {
-			nstr += fmt.Sprintf("(%v)", col.Length)
-		}
-	} else if len(col.EnumOptions) > 0 { //enum
-		nstr += "("
-		opts := ""
-
-		enumOptions := make([]string, 0, len(col.EnumOptions))
-		for enumOption := range col.EnumOptions {
-			enumOptions = append(enumOptions, enumOption)
-		}
-		sort.Strings(enumOptions)
-
-		for _, v := range enumOptions {
-			opts += fmt.Sprintf(",'%v'", v)
-		}
-		nstr += strings.TrimLeft(opts, ",")
-		nstr += ")"
-	} else if len(col.SetOptions) > 0 { //enum
-		nstr += "("
-		opts := ""
-
-		setOptions := make([]string, 0, len(col.SetOptions))
-		for setOption := range col.SetOptions {
-			setOptions = append(setOptions, setOption)
-		}
-		sort.Strings(setOptions)
-
-		for _, v := range setOptions {
-			opts += fmt.Sprintf(",'%v'", v)
-		}
-		nstr += strings.TrimLeft(opts, ",")
-		nstr += ")"
-	}
+	nstr := "type:" + strings.ToLower(DB().SQLType(col))
 	res = append(res, nstr)
 
 	if len(res) > 0 {

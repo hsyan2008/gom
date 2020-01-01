@@ -19,7 +19,13 @@ func InitDb() (err error) {
 	if err != nil {
 		return
 	}
-	engine.SetLogLevel(core.LOG_WARNING)
+
+	if verbose {
+		engine.SetLogLevel(core.LOG_DEBUG)
+		engine.ShowSQL(verbose)
+	} else {
+		engine.SetLogLevel(core.LOG_WARNING)
+	}
 
 	if err = engine.Ping(); err != nil {
 		return fmt.Errorf("try to connect db faild: %s", err)

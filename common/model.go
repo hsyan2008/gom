@@ -19,7 +19,13 @@ func NewModel(table *core.Table) (m model) {
 		TableName:  table.Name,
 		Imports:    make(map[string]string),
 	}
+	//postgres里可能存在重复字段
+	var fieldMap = map[string]bool{}
 	for _, column := range table.Columns() {
+		if fieldMap[column.Name] {
+			continue
+		}
+		fieldMap[column.Name] = true
 		f := NewModelField(table, column)
 		for k, v := range f.Imports {
 			m.Imports[k] = v

@@ -13,6 +13,7 @@ import (
 
 var config AppConfigs
 var configFile string
+var verbose bool
 
 var configLoaded bool
 
@@ -25,6 +26,7 @@ func LoadConfig() (err error) {
 	var tables string
 	flag.StringVar(&configFile, "c", "config.toml", "config file")
 	flag.StringVar(&tables, "t", "", "specify tables")
+	flag.BoolVar(&verbose, "v", false, "print log")
 	flag.Parse()
 
 	configFile = filepath.Join(common.GetAppPath(), configFile)
