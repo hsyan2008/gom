@@ -36,7 +36,9 @@ func getTypeAndImports(table *core.Table, column *core.Column) (t string, import
 		//如果字段类型等于原类型
 		if t == path.Base(k) {
 			t, pkg := getTypeAndPkg(v)
-			imports[pkg] = pkg
+			if pkg != "" {
+				imports[pkg] = pkg
+			}
 			return t, imports
 		}
 	}
@@ -44,11 +46,15 @@ func getTypeAndImports(table *core.Table, column *core.Column) (t string, import
 	//如果字段名字在集合
 	if v, ok := Configs().ColumnType[column.Name]; ok {
 		t, pkg := getTypeAndPkg(v)
-		imports[pkg] = pkg
+		if pkg != "" {
+			imports[pkg] = pkg
+		}
 		return t, imports
 	} else if v, ok := Configs().ColumnType[fmt.Sprintf("%s.%s", table.Name, column.Name)]; ok {
 		t, pkg := getTypeAndPkg(v)
-		imports[pkg] = pkg
+		if pkg != "" {
+			imports[pkg] = pkg
+		}
 		return t, imports
 	}
 
